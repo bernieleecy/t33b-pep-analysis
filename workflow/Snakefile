@@ -1,0 +1,49 @@
+import pandas as pd
+import numpy as np
+
+
+configfile: "config/config.yaml"
+
+
+IDS = [str(i) for i in config["run_ids"]]
+N_RUNS = len(IDS)
+print(IDS, N_RUNS)
+
+samples = pd.read_csv("config/samples.csv", index_col="folder")
+FOLDERS = samples.index.tolist()
+GLUTAMATES = ["E984", "E1044"]
+
+# Load rules
+include: "rules/trajs.smk"
+include: "rules/protein_rms.smk"
+include: "rules/peptide_rms.smk"
+include: "rules/n1039_dists.smk"
+
+
+pep_input = []
+for f in FOLDERS:
+    if samples.loc[f, "peptide"] == "yes":
+        pep_input.append(f'results/{f}/peptide/t33b_pep_backbone_rmsd.png')
+        pep_input.append(f'results/{f}/peptide/t33b_pep_backbone_rmsf.png')
+
+k18ac_input = []
+for f in FOLDERS:
+    if samples.loc[f, "k18_type"] == "K18Ac" and not samples.loc[f, "mutations"] == "N1039A":
+        k18ac_input.append(f'results/{f}/n1039_dists/N1039_dist_heatmap.png')
+        k18ac_input.append(f'results/{f}/n1039_dists/N1039_dist_kde.png')
+
+rule all:
+    """
+    Basic analysis for T33B simulations, either apo or with peptide
+    - For runs with the peptide, add the peptide inputs
+
+    Full dataset used during analysis
+    """
+    input:
+        pep_input,
+        k18ac_input,
+        index=expand("runs/{folder}/index.ndx", folder=FOLDERS),
+        protein_gro=expand("runs/{folder}/protein_noh2o.gro", folder=FOLDERS),
+        fitted_xtc=expand("runs/{folder}/{i}-whole_fit.xtc", folder=FOLDERS, i=IDS),
+        protein_rmsd=expand("results/{folder}/protein/t33b_backbone_rmsd.png", folder=FOLDERS),
+        protein_rmsf=expand("results/{folder}/protein/t33b_rmsf.png", folder=FOLDERS),

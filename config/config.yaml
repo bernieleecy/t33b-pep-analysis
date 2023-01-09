@@ -1,0 +1,16 @@
+run_ids :
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+
+em_tpr : em.tpr
+md_tpr : md_1.tpr
+ndx_file : index.ndx
+complex_gro : complex_ions.gro
+
+xtc_step : 20
+plot_step : 500
+
+mpl_style : config/t33a_small_mol_plotstyle.mplstyle
