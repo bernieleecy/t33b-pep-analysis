@@ -21,13 +21,16 @@ include: "rules/peptide_rms.smk"
 include: "rules/n1039_dists.smk"
 include: "rules/f1038_dists.smk"
 include: "rules/glutamates_dists.smk"
-
+include: "rules/plip.smk"
 
 pep_input = []
+plip_input = []
 for f in FOLDERS:
     if samples.loc[f, "peptide"] == "yes":
         pep_input.append(f"results/{f}/peptide/t33b_pep_backbone_rmsd.png")
         pep_input.append(f"results/{f}/peptide/t33b_pep_backbone_rmsf.png")
+        plip_input.append(f"results/{f}/plip/plip_data.xlsx")
+        plip_input.append(f"results/{f}/plip/all_resi_hydrophobic_hydrophilic.png")
 
 k18ac_input = []
 k18ac_clip_10ns_input = []
@@ -93,3 +96,12 @@ rule clip_10ns_analysis:
         f1038_y993_kde_clip_10ns=expand(
             "results/{folder}/f1038_dists/F1038_Y993_kde_clip_10ns.png", folder=FOLDERS
         ),
+
+
+
+rule get_plip:
+    """
+    Specifically for running PLIP analysis
+    """
+    input:
+        plip_input
