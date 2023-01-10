@@ -60,7 +60,7 @@ xticks = np.arange(0, 5001, 1000)
 xticklabels = np.arange(0, 101, 20)
 
 axes[0].set_yticklabels(axes[0].get_yticklabels(), rotation=0)
-axes[0].set_title("N1039\u2013T3A")
+axes[0].set_title(snakemake.params.title)
 
 axes[0].set(xlabel="Time (ns)", ylabel="", xticks=xticks)
 axes[0].set_xticklabels(xticklabels, rotation=0)

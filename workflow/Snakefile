@@ -13,24 +13,49 @@ samples = pd.read_csv("config/samples.csv", index_col="folder")
 FOLDERS = samples.index.tolist()
 GLUTAMATES = ["E984", "E1044"]
 
+
 # Load rules
 include: "rules/trajs.smk"
 include: "rules/protein_rms.smk"
 include: "rules/peptide_rms.smk"
 include: "rules/n1039_dists.smk"
+include: "rules/f1038_dists.smk"
+include: "rules/glutamates_dists.smk"
 
 
 pep_input = []
 for f in FOLDERS:
     if samples.loc[f, "peptide"] == "yes":
-        pep_input.append(f'results/{f}/peptide/t33b_pep_backbone_rmsd.png')
-        pep_input.append(f'results/{f}/peptide/t33b_pep_backbone_rmsf.png')
+        pep_input.append(f"results/{f}/peptide/t33b_pep_backbone_rmsd.png")
+        pep_input.append(f"results/{f}/peptide/t33b_pep_backbone_rmsf.png")
 
 k18ac_input = []
+k18ac_clip_10ns_input = []
 for f in FOLDERS:
-    if samples.loc[f, "k18_type"] == "K18Ac" and not samples.loc[f, "mutations"] == "N1039A":
-        k18ac_input.append(f'results/{f}/n1039_dists/N1039_dist_heatmap.png')
-        k18ac_input.append(f'results/{f}/n1039_dists/N1039_dist_kde.png')
+    if (
+        samples.loc[f, "k18_type"] == "K18Ac"
+        and not samples.loc[f, "mutations"] == "N1039A"
+    ):
+        k18ac_input.append(f"results/{f}/n1039_dists/N1039_dist_heatmap.png")
+        k18ac_input.append(f"results/{f}/n1039_dists/N1039_dist_kde.png")
+        k18ac_clip_10ns_input.append(
+            f"results/{f}/n1039_dists/N1039_dist_kde_clip_10ns.png"
+        )
+
+r17_input = []
+r17_clip_10ns_input = []
+for f in FOLDERS:
+    if (
+        samples.loc[f, "peptide"] == "yes"
+        and not samples.loc[f, "mutations"] == "E981A"
+    ):
+        r17_input.append(f"results/{f}/glutamate_dists/glutamate_violins.png")
+        r17_input.append(f"results/{f}/glutamate_dists/E981_E1044_R17_heatmap.png")
+        r17_input.append(f"results/{f}/glutamate_dists/E981_E984_R17_heatmap.png")
+        r17_clip_10ns_input.append(
+            f"results/{f}/glutamate_dists/glutamate_violins_clip_10ns.png"
+        )
+
 
 rule all:
     """
@@ -42,8 +67,29 @@ rule all:
     input:
         pep_input,
         k18ac_input,
+        r17_input,
         index=expand("runs/{folder}/index.ndx", folder=FOLDERS),
         protein_gro=expand("runs/{folder}/protein_noh2o.gro", folder=FOLDERS),
         fitted_xtc=expand("runs/{folder}/{i}-whole_fit.xtc", folder=FOLDERS, i=IDS),
-        protein_rmsd=expand("results/{folder}/protein/t33b_backbone_rmsd.png", folder=FOLDERS),
+        protein_rmsd=expand(
+            "results/{folder}/protein/t33b_backbone_rmsd.png", folder=FOLDERS
+        ),
         protein_rmsf=expand("results/{folder}/protein/t33b_rmsf.png", folder=FOLDERS),
+        f1038_y993_heatmap=expand(
+            "results/{folder}/f1038_dists/F1038_Y993_heatmap.png", folder=FOLDERS
+        ),
+        f1038_y993_kde=expand(
+            "results/{folder}/f1038_dists/F1038_Y993_kde.png", folder=FOLDERS
+        ),
+
+
+rule clip_10ns_analysis:
+    """
+    For specific analyses with the first 10 ns of simulation data removed from each run
+    """
+    input:
+        k18ac_clip_10ns_input,
+        r17_clip_10ns_input,
+        f1038_y993_kde_clip_10ns=expand(
+            "results/{folder}/f1038_dists/F1038_Y993_kde_clip_10ns.png", folder=FOLDERS
+        ),

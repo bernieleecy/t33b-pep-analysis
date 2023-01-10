@@ -25,7 +25,7 @@ rule convert_gro:
 
 rule make_ndx:
     """
-    Params depend on the protein 
+    Params depend on the protein
     """
     input:
         "runs/{folder}/md_1.tpr",
