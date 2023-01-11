@@ -53,7 +53,7 @@ rule plot_t33b_n1039_ar_kde:
         'results/{folder}/n1039_dists/N1039_dist_kde.png',
     params:
         xmin = 2,
-        xmax = 15,
+        xmax = 10,
         xlabel = 'Distance (Å)',
     script:
         '../scripts/plot_kde.py'

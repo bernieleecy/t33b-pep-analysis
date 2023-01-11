@@ -42,6 +42,7 @@ Files needed in the `runs/run_type` folder:
 
 These files do not need to be generated separately: 
 - `md_{id}.xtc`: Raw trajectory files from GROMACS 
+- `md_1.gro`: For generating `protein_noh2o.gro` to help visualisation in VMD
 - `complex.gro`
 - `complex_ions.gro`
 - `em.tpr`
