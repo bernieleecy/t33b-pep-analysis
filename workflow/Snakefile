@@ -22,6 +22,7 @@ include: "rules/n1039_dists.smk"
 include: "rules/f1038_dists.smk"
 include: "rules/glutamates_dists.smk"
 include: "rules/plip.smk"
+include: "rules/water.smk"
 
 
 pep_input = []
@@ -88,6 +89,11 @@ rule all:
         ),
         f1038_y993_kde=expand(
             "results/{folder}/f1038_dists/F1038_Y993_kde.png", folder=FOLDERS
+        ),
+        water_density=expand(
+            "results/{folder}/water_density/water_xtal_{i}.png",
+            folder=FOLDERS,
+            i=["1.5", "2.0"],
         ),
 
 

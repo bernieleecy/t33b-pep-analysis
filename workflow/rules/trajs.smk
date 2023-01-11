@@ -119,11 +119,11 @@ rule make_plip_traj:
 
 
 rule align_wat_trajs:
-    '''
+    """
     Previously used Backbone for final fitting
 
     Here, use the protein backbone only for final fitting as this is more appropriate
-    '''
+    """
     input:
         "runs/{folder}/md_{i}.xtc",
     output:
@@ -149,8 +149,27 @@ rule align_wat_trajs:
                     -n {params.prefix}/{config[ndx_file]} -o {output.traj_c} \
                     -pbc mol -center -ur compact
 
-        echo 'r_1-188_&_4' 0 |
+       echo 'r_1-188_&_Backbone' 0 |
         gmx trjconv -f {output.traj_c} -s {params.prefix}/{config[em_tpr]} \
                     -n {params.prefix}/{config[ndx_file]} -o {output.align} \
                     -fit rot+trans
+        """
+
+
+def get_aligned_wat_trajs(wildcards):
+    return [os.path.join("runs", wildcards.folder, run + "-align.xtc") for run in IDS]
+
+
+rule make_concat_wat_trajs:
+    """
+    Input removed after combining files to save space
+    """
+    input:
+        get_aligned_wat_trajs,
+    output:
+        wat_full="runs/{folder}/combined_wat.xtc",
+    shell:
+        """
+        gmx trjcat -f {input} -o {output.wat_full} -cat
+        rm {input}
         """

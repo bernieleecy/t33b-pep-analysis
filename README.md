@@ -9,7 +9,7 @@ On my M1 mac, the appropriate conda environment is `snake_env`
 * This version of `snake_env` has the `osx-64` subdir set in the `.condarc` file, see install instructions below
 
 ```
-CONDA_SUBDIR=osx-64 mamba env create -f t33b_md.yml
+CONDA_SUBDIR=osx-64 mamba env create -f *_md.yml
 conda activate snake_env
 python -c "import platform; print(platform.machine())" # this should be x86_64
 conda config --env --set subdir osx-64
@@ -84,8 +84,9 @@ snakemake get_plip -c4
 
 To configure the environment on a new machine, run
 ```
-conda env create -f t33a_md.yml
+conda env create -f *_md.yml
 ```
+However, I've not been great at keeping package versions consistent (e.g. I sometimes upgrade Snakemake to get bugs fixed and all the dependencies update at the same time), take this yml file with a pinch of salt.
 
 In addition, GROMACS is required to use the `gmx` tools.
 PLIP is also needed (I use Docker to install it). 
