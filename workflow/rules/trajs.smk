@@ -6,8 +6,7 @@ import os
 
 rule convert_gro:
     """
-    Because cpptraj does not accept gro files as params
-    Also used for water density plotting
+    For water density plotting
     """
     input:
         "runs/{folder}/complex_ions.gro",
@@ -17,7 +16,7 @@ rule convert_gro:
         prefix="runs/{folder}",
     shell:
         """
-        echo "Protein_T3A_ZN" |
+        echo "Protein_ZN" |
         gmx editconf -f {input} -n {params.prefix}/{config[ndx_file]} \
                      -o {output}
         """
@@ -119,23 +118,24 @@ rule make_plip_traj:
         "gmx trjcat -f {input} -o {output} -cat -dt 1000"
 
 
-def get_aligned_wat_trajs(wildcards):
-    return [os.path.join("runs", wildcards.folder, run + "-align.xtc") for run in IDS]
-
-
 rule align_wat_trajs:
+    '''
+    Previously used Backbone for final fitting
+
+    Here, use the protein backbone only for final fitting as this is more appropriate
+    '''
     input:
         "runs/{folder}/md_{i}.xtc",
     output:
         align="runs/{folder}/{i}-align.xtc",
-        traj_a=temp("runs/{folder}/a_{i}.xtc"),
-        traj_b=temp("runs/{folder}/b_{i}.xtc"),
-        traj_c=temp("runs/{folder}/c_{i}.xtc"),
+        traj_a=temporary("runs/{folder}/a_{i}.xtc"),
+        traj_b=temporary("runs/{folder}/b_{i}.xtc"),
+        traj_c=temporary("runs/{folder}/c_{i}.xtc"),
     params:
         prefix="runs/{folder}",
     shell:
         """
-        echo 'Protein_T3A_ZN' 0 |
+        echo 'Protein_ZN' 0 |
         gmx trjconv -f {input} -s {params.prefix}/{config[md_tpr]} \
                     -n {params.prefix}/{config[ndx_file]} -o {output.traj_a} \
                     -pbc cluster -dt 200
@@ -144,30 +144,13 @@ rule align_wat_trajs:
         gmx trjconv -f {output.traj_a} -s {params.prefix}/{config[md_tpr]} \
                     -o {output.traj_b} -pbc whole -ur compact
 
-        echo 'Protein_T3A_ZN' 0 |
+        echo 'Protein_ZN' 0 |
         gmx trjconv -f {output.traj_b} -s {params.prefix}/{config[md_tpr]} \
                     -n {params.prefix}/{config[ndx_file]} -o {output.traj_c} \
                     -pbc mol -center -ur compact
 
-        echo 'Backbone' 0 |
+        echo 'r_1-188_&_4' 0 |
         gmx trjconv -f {output.traj_c} -s {params.prefix}/{config[em_tpr]} \
                     -n {params.prefix}/{config[ndx_file]} -o {output.align} \
                     -fit rot+trans
-        """
-
-
-rule make_concat_wat_trajs:
-    """
-    Input removed after combining files to save space
-    """
-    input:
-        get_aligned_wat_trajs,
-    output:
-        wat_full="runs/{folder}/combined_wat.xtc",
-        wat_plip="runs/{folder}/plip_water_traj.xtc",
-    shell:
-        """
-        gmx trjcat -f {input} -o {output.wat_full} -cat
-        gmx trjcat -f {input} -o {output.wat_plip} -cat -dt 1000
-        rm {input}
         """
