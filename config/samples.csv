@@ -1,3 +1,6 @@
 folder,peptide,k9_type,k18_type,mutations
+apo,no,NA,NA,WT
 mod_pep,yes,K9Me3,K18Ac,WT
 mod_pep_trans,yes,K9Me3,K18Ac,WT
+unmod_pep,yes,K9,K18,WT
+n1039a,yes,K9Me3,K18Ac,N1039A

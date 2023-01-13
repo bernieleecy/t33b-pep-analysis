@@ -9,7 +9,8 @@ rule make_protein_rmsd_xvgs:
     Put single quotes around the index group so it is read correctly
     """
     input:
-        "runs/{folder}/{i}-whole_fit.xtc",
+        xtc="runs/{folder}/{i}-whole_fit.xtc",
+        ndx="runs/{folder}/index.ndx",
     output:
         "results/{folder}/protein/data/{i}-backbone_rmsd.xvg",
     params:
@@ -18,8 +19,8 @@ rule make_protein_rmsd_xvgs:
     shell:
         """
         echo '{params.ndx_group}' '{params.ndx_group}' |
-        gmx rms -f {input} -s {params.prefix}/{config[em_tpr]} \
-                -n {params.prefix}/{config[ndx_file]} -o {output} -tu ns
+        gmx rms -f {input.xtc} -s {params.prefix}/{config[em_tpr]} \
+                -n {input.ndx} -o {output} -tu ns
         """
 
 
@@ -50,7 +51,8 @@ rule make_protein_rmsf_xvgs:
     Alignment to em.tpr not needed here since it's a fluctuation
     """
     input:
-        "runs/{folder}/{i}-whole_fit.xtc"
+        xtc = "runs/{folder}/{i}-whole_fit.xtc",
+        ndx="runs/{folder}/index.ndx",
     output:
         "results/{folder}/protein/data/{i}-backbone_rmsf.xvg",
     params:
@@ -58,8 +60,8 @@ rule make_protein_rmsf_xvgs:
     shell:
         """
         echo 'r_1-188_&_Backbone' |
-        gmx rmsf -f {input} -s {params.prefix}/{config[md_tpr]} \
-                 -n {params.prefix}/{config[ndx_file]} -o {output} -res
+        gmx rmsf -f {input.xtc} -s {params.prefix}/{config[md_tpr]} \
+                 -n {input.ndx} -o {output} -res
         """
 
 

@@ -90,3 +90,10 @@ However, I've not been great at keeping package versions consistent (e.g. I some
 
 In addition, GROMACS is required to use the `gmx` tools.
 PLIP is also needed (I use Docker to install it). 
+
+
+## Workflow quirks
+
+As much of the TRIM peptides work was done early in the PhD, when I was not using workflows, there are some quirks in the workflow 
+* The unmodified peptide runs have different residue indices compared to the modified peptide runs (ri 191-211 rather than ri 189-209). 
+As a result, for the unmod peptide runs, the index groups 23 and 24 have their name changed to ri 189-209 etc. for consistency with the other runs

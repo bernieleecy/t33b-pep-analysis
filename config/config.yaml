@@ -7,7 +7,6 @@ run_ids :
 
 em_tpr : em.tpr
 md_tpr : md_1.tpr
-ndx_file : index.ndx
 complex_gro : complex_ions.gro
 
 xtc_step : 20

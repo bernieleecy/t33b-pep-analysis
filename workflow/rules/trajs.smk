@@ -4,24 +4,6 @@
 import os
 
 
-rule convert_gro:
-    """
-    For water density plotting
-    """
-    input:
-        "runs/{folder}/complex_ions.gro",
-    output:
-        "runs/{folder}/complex_ions.pdb",
-    params:
-        prefix="runs/{folder}",
-    shell:
-        """
-        echo "Protein_ZN" |
-        gmx editconf -f {input} -n {params.prefix}/{config[ndx_file]} \
-                     -o {output}
-        """
-
-
 rule make_ndx:
     """
     Params depend on the protein
@@ -36,10 +18,18 @@ rule make_ndx:
         grp_3="ri 1-188 & 4",
         grp_4="ri 189-209",
         grp_5="ri 189-209 & 4",
+        unmod_4="ri 191-211",
+        unmod_5="ri 191-211 & 4",
     run:
-        if samples.loc[wildcards.folder, "peptide"] == "yes":
+        if samples.loc[wildcards.folder, "peptide"] == "yes" and samples.loc[wildcards.folder, "k18_type"] == "K18Ac":
             shell(
                 'echo -e "{params.grp_1}\n{params.grp_2}\n{params.grp_3}\n{params.grp_4}\n{params.grp_5}\n q "'
+                "| gmx make_ndx -f {input} -o {output}"
+            )
+        elif samples.loc[wildcards.folder, "peptide"] == "yes" and samples.loc[wildcards.folder, "k18_type"] == "K18":
+            shell(
+                'echo -e "{params.grp_1}\n{params.grp_2}\n{params.grp_3}\n{params.unmod_4}\n{params.unmod_5}\n \
+                        name 23 r_189-209\n name 24 r_189-209_&_Backbone\n q "'
                 "| gmx make_ndx -f {input} -o {output}"
             )
         elif samples.loc[wildcards.folder, "peptide"] == "no":
@@ -47,6 +37,25 @@ rule make_ndx:
                 'echo -e "{params.grp_1}\n{params.grp_2}\n{params.grp_3}\n q "'
                 "| gmx make_ndx -f {input} -o {output}"
             )
+
+
+rule convert_gro:
+    """
+    For water density plotting
+    """
+    input:
+        gro="runs/{folder}/complex_ions.gro",
+        ndx="runs/{folder}/index.ndx",
+    output:
+        "runs/{folder}/complex_ions.pdb",
+    params:
+        prefix="runs/{folder}",
+    shell:
+        """
+        echo "Protein_ZN" |
+        gmx editconf -f {input.gro} -n {input.ndx} \
+                     -o {output}
+        """
 
 
 rule make_protein_noh2o:
@@ -125,7 +134,8 @@ rule align_wat_trajs:
     Here, use the protein backbone only for final fitting as this is more appropriate
     """
     input:
-        "runs/{folder}/md_{i}.xtc",
+        xtc="runs/{folder}/md_{i}.xtc",
+        ndx="runs/{folder}/index.ndx",
     output:
         align="runs/{folder}/{i}-align.xtc",
         traj_a=temporary("runs/{folder}/a_{i}.xtc"),
@@ -136,8 +146,8 @@ rule align_wat_trajs:
     shell:
         """
         echo 'Protein_ZN' 0 |
-        gmx trjconv -f {input} -s {params.prefix}/{config[md_tpr]} \
-                    -n {params.prefix}/{config[ndx_file]} -o {output.traj_a} \
+        gmx trjconv -f {input.xtc} -s {params.prefix}/{config[md_tpr]} \
+                    -n {input.ndx} -o {output.traj_a} \
                     -pbc cluster -dt 200
 
         echo 0 |
@@ -146,12 +156,12 @@ rule align_wat_trajs:
 
         echo 'Protein_ZN' 0 |
         gmx trjconv -f {output.traj_b} -s {params.prefix}/{config[md_tpr]} \
-                    -n {params.prefix}/{config[ndx_file]} -o {output.traj_c} \
+                    -n {input.ndx} -o {output.traj_c} \
                     -pbc mol -center -ur compact
 
        echo 'r_1-188_&_Backbone' 0 |
         gmx trjconv -f {output.traj_c} -s {params.prefix}/{config[em_tpr]} \
-                    -n {params.prefix}/{config[ndx_file]} -o {output.align} \
+                    -n {input.ndx} -o {output.align} \
                     -fit rot+trans
         """
 
