@@ -23,6 +23,7 @@ include: "rules/f1038_dists.smk"
 include: "rules/glutamates_dists.smk"
 include: "rules/plip.smk"
 include: "rules/water.smk"
+include: "rules/vmd_hbonds.smk"
 
 
 pep_input = []
@@ -31,6 +32,13 @@ for f in FOLDERS:
     if samples.loc[f, "peptide"] == "yes":
         pep_input.append(f"results/{f}/peptide/t33b_pep_backbone_rmsd.png")
         pep_input.append(f"results/{f}/peptide/t33b_pep_backbone_rmsf.png")
+        pep_input.extend(
+            [
+                f"results/{f}/vmd_hbonds/data/{p}_hbonds_above_5_{type}.dat"
+                for p in ["bd", "phd"]
+                for type in ["pairs", "unique"]
+            ]
+        )
         plip_input.append(f"results/{f}/plip/plip_data.xlsx")
         plip_input.append(f"results/{f}/plip/all_resi_hydrophobic_hydrophilic.png")
 
