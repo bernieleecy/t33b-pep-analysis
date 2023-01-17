@@ -21,15 +21,21 @@ rule make_ndx:
         unmod_4="ri 191-211",
         unmod_5="ri 191-211 & 4",
     run:
-        if samples.loc[wildcards.folder, "peptide"] == "yes" and samples.loc[wildcards.folder, "k18_type"] == "K18Ac":
+        if (
+            samples.loc[wildcards.folder, "peptide"] == "yes"
+            and samples.loc[wildcards.folder, "k18_type"] == "K18Ac"
+        ):
             shell(
                 'echo -e "{params.grp_1}\n{params.grp_2}\n{params.grp_3}\n{params.grp_4}\n{params.grp_5}\n q "'
                 "| gmx make_ndx -f {input} -o {output}"
             )
-        elif samples.loc[wildcards.folder, "peptide"] == "yes" and samples.loc[wildcards.folder, "k18_type"] == "K18":
+        elif (
+            samples.loc[wildcards.folder, "peptide"] == "yes"
+            and samples.loc[wildcards.folder, "k18_type"] == "K18"
+        ):
             shell(
                 'echo -e "{params.grp_1}\n{params.grp_2}\n{params.grp_3}\n{params.unmod_4}\n{params.unmod_5}\n \
-                        name 23 r_189-209\n name 24 r_189-209_&_Backbone\n q "'
+                name 23 r_189-209\n name 24 r_189-209_&_Backbone\n q "'
                 "| gmx make_ndx -f {input} -o {output}"
             )
         elif samples.loc[wildcards.folder, "peptide"] == "no":

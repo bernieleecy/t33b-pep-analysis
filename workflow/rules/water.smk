@@ -1,36 +1,38 @@
 # Getting water density
 
+
 rule get_water_density:
-    '''
+    """
     Gets water density
-    '''
+    """
     input:
-        tpr = 'runs/{folder}/em.tpr',
-        xtc = 'runs/{folder}/combined_wat.xtc',
+        tpr="runs/{folder}/em.tpr",
+        xtc="runs/{folder}/combined_wat.xtc",
     output:
-        'results/{folder}/water_density/water.dx'
+        "results/{folder}/water_density/water.dx",
     script:
-        '../scripts/mda_water_density.py'
+        "../scripts/mda_water_density.py"
+
 
 rule plot_water_density:
-    '''
+    """
     Plots water density in PyMOL
     Important to use complex_ions.pdb here
     - Waters removed, so the only waters are from complex.gro (the
       crystallographic waters)
     - remove complex_ions after aligning, otherwise I have many atoms
-    '''
+    """
     input:
-        complex = 'runs/{folder}/complex.gro',
-        complex_ions = 'runs/{folder}/complex_ions.pdb',
-        water = rules.get_water_density.output,
+        complex="runs/{folder}/complex.gro",
+        complex_ions="runs/{folder}/complex_ions.pdb",
+        water=rules.get_water_density.output,
     output:
-        pymol_script = 'results/{folder}/water_density/water.pml',
-        pse = 'results/{folder}/water_density/water_density.pse',
-        png_20 = 'results/{folder}/water_density/water_xtal_2.0.png',
-        png_15 = 'results/{folder}/water_density/water_xtal_1.5.png',
+        pymol_script="results/{folder}/water_density/water.pml",
+        pse="results/{folder}/water_density/water_density.pse",
+        png_20="results/{folder}/water_density/water_xtal_2.0.png",
+        png_15="results/{folder}/water_density/water_xtal_1.5.png",
     shell:
-        '''
+        """
         echo -e "load {input.complex} \
                  \nload {input.complex_ions} \
                  \nload {input.water} \
@@ -75,4 +77,4 @@ rule plot_water_density:
                  \npng {output.png_15}, ray=1, dpi=600, height=1000, width=1000 \
                  \ndeselect" > {output.pymol_script} 
         pymol -c {output.pymol_script} 
-        '''
+        """

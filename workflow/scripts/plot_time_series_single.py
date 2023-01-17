@@ -51,7 +51,7 @@ interval = int(plot_step / timestep)
 
 # plot data
 fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)
-ax.plot(times[::interval], data[::interval], color='black')
+ax.plot(times[::interval], data[::interval], color="black")
 
 # 100 ns trajectories so change to 5 ticks
 xticks_intervals = int(times[-1] / 5)

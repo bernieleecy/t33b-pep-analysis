@@ -1,19 +1,20 @@
 name: snake_env
 channels:
-  - bioconda
   - conda-forge
+  - bioconda
 dependencies:
-  - snakemake=7.14.0
-  - python=3.10.4
+  - snakemake=7.19.1
+  - python=3.10.6
   - matplotlib-base=3.5.1
   - numpy=1.22.3
   - pandas=1.4.2
   - seaborn=0.11.2
   - openpyxl=3.0.9
   - pyjanitor=0.22.0
+  - pip=22.0.4
   - ambertools=22
   - compilers
-  - pip=22.0.4
+  - snakefmt=0.8.0
   - pip:
     - git+https://github.com/bernieleecy/cygnus
     - MDAnalysis==2.1.0

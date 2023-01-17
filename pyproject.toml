@@ -1,0 +1,3 @@
+[tool.snakefmt]
+include = '\.smk$|^Snakefile|\.py$'
+exclude = '\.snakemake|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|\.svn|_build|buck-out|build|^dist$'

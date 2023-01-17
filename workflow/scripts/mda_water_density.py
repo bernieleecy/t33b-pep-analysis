@@ -8,11 +8,11 @@ xtc_file = snakemake.input.xtc
 
 u = mda.Universe(tpr_file, xtc_file)
 
-ow = u.select_atoms('name OW')
+ow = u.select_atoms("name OW")
 
 D = DensityAnalysis(ow, delta=1)
 D.run()
-D.results.density.convert_density('TIP3P')
+D.results.density.convert_density("TIP3P")
 
 # type='double' ensures the dx file can be read by PyMOL
-D.results.density.export(snakemake.output[0], type='double')
+D.results.density.export(snakemake.output[0], type="double")
