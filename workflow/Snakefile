@@ -20,6 +20,7 @@ include: "rules/protein_rms.smk"
 include: "rules/peptide_rms.smk"
 include: "rules/n1039_dists.smk"
 include: "rules/f1038_dists.smk"
+include: "rules/y993_dists.smk"
 include: "rules/glutamates_dists.smk"
 include: "rules/plip.smk"
 include: "rules/water.smk"
@@ -53,6 +54,11 @@ for f in FOLDERS:
         k18ac_input.append(f"results/{f}/n1039_dists/N1039_dist_kde.png")
         k18ac_clip_10ns_input.append(
             f"results/{f}/n1039_dists/N1039_dist_kde_clip_10ns.png"
+        )
+        k18ac_input.append(f"results/{f}/y993_dists/Y993_dist_heatmap.png")
+        k18ac_input.append(f"results/{f}/y993_dists/Y993_dist_kde.png")
+        k18ac_clip_10ns_input.append(
+            f"results/{f}/y993_dists/Y993_dist_kde_clip_10ns.png"
         )
 
 r17_input = []
