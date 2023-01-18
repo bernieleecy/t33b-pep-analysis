@@ -85,3 +85,12 @@ rule plot_t33b_rmsf:
         "results/{folder}/protein/t33b_rmsf.png",
     script:
         "../scripts/plot_t33b_rmsf.py"
+
+
+rule plot_rmsf_test:
+    input:
+        expand("results/mod_pep/protein/data/{i}-backbone_rmsf.xvg", i=IDS)
+    output:
+        "results/test/rmsf_test.png"
+    script:
+        "../scripts/plot_t33b_rmsf_indiv.py"
