@@ -37,41 +37,27 @@ def process_rmsf(file_list):
 
             rmsf.append(val)
 
-    df = pd.DataFrame(rmsf, columns=resi).describe()
-    print(df.head())
+    df = pd.DataFrame(rmsf, columns=resi)
 
     return df
 
 
 # all data, exclude N and C terminal caps
-rmsf_data = process_rmsf(files)
-cols = rmsf_data.columns[1:-1].tolist()
-print(cols)
-protein_rmsf_avg = rmsf_data.iloc[1, 1:-1]
-protein_rmsf_stdev = rmsf_data.iloc[2, 1:-1]
+resi_of_interest = snakemake.params.resi_of_interest
+rmsf_data = process_rmsf(files).filter(items=resi_of_interest)
 
-# t33b residues hard coded in
-resi = np.arange(885, 1071)
-print(len(resi))
+fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)
 
-fig, ax = plt.subplots(figsize=(8, 4), constrained_layout=True)
+sns.boxplot(data=rmsf_data)
 
-ax.errorbar(
-    resi,
-    protein_rmsf_avg,
-    yerr=protein_rmsf_stdev,
-    marker="o",
-    markersize=1,
-    capsize=2,
-    color="black",
-)
+ymin = getattr(snakemake.params, "ymin", 0)
+ymax = getattr(snakemake.params, "ymax", 5)
 
 ax.set(
     xlabel="Residue number",
     ylabel="RMSF (Å)",
-    xticks=resi[::20],
-    xticklabels=resi[::20],
-    ylim=(0, 10),
+    xticklabels=resi_of_interest,
+    ylim=(0, 3),
 )
 
 sns.despine()

@@ -84,14 +84,19 @@ rule plot_t33b_rmsf:
     output:
         "results/{folder}/protein/t33b_rmsf.png",
     script:
-<<<<<<< HEAD
-        "../scripts/plot_t33b_rmsf.py"
-
-
-rule plot_rmsf_test:
-    input:
-        expand("results/mod_pep/protein/data/{i}-backbone_rmsf.xvg", i=IDS)
-    output:
-        "results/test/rmsf_test.png"
-    script:
         "../scripts/plot_protein_rmsf.py"
+
+
+rule plot_t33b_rmsf_indiv_resi:
+    '''
+    For zooming in on specific protein residues (backbone RMSF here)
+    '''
+    input:
+        get_rmsf_xvgs,
+    output:
+        "results/{folder}/protein/t33b_rmsf_specific_resi.png",
+    params:
+        resi_of_interest = [981, 990, 993, 1038, 1039, 1045],
+        ymax = 3,
+    script:
+        "../scripts/plot_rmsf_specific_resi.py"
