@@ -96,7 +96,7 @@ rule plot_t33b_rmsf_indiv_resi:
     output:
         "results/{folder}/protein/t33b_rmsf_specific_resi.png",
     params:
-        resi_of_interest = [981, 990, 993, 1038, 1039, 1045],
+        resi_of_interest = [981, 990, 993, 1038, 1039, 1044, 1045],
         ymax = 3,
     script:
         "../scripts/plot_rmsf_specific_resi.py"
