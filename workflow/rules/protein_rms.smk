@@ -84,4 +84,4 @@ rule plot_t33b_rmsf:
     output:
         "results/{folder}/protein/t33b_rmsf.png",
     script:
-        "../scripts/plot_t33b_rmsf.py"
+        "../scripts/plot_protein_rmsf.py"
