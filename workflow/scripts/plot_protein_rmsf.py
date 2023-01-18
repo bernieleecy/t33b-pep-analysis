@@ -20,9 +20,10 @@ def process_rmsf(file_list):
     Returns the summary statistics of the dataframe (Average is row 1, stdev is
     row 2)
     """
+    resi = []
     rmsf = []
 
-    for file in file_list:
+    for i, file in enumerate(file_list):
         with open(file) as infile:
             val = []
 
@@ -31,10 +32,12 @@ def process_rmsf(file_list):
                     data = line.strip().split("  ")  # two spaces between each entry
                     rmsf_val = float(data[1].strip())
                     val.append(rmsf_val * 10)  # convert to A
+                    if i == 0:
+                        resi.append(int(data[0].strip()))
 
             rmsf.append(val)
 
-    df = pd.DataFrame(rmsf).describe()
+    df = pd.DataFrame(rmsf, columns=resi).describe()
 
     return df
 
@@ -44,8 +47,8 @@ rmsf_data = process_rmsf(files)
 protein_rmsf_avg = rmsf_data.iloc[1, 1:-1]
 protein_rmsf_stdev = rmsf_data.iloc[2, 1:-1]
 
-# t33b residues hard coded in
-resi = np.arange(885, 1071)
+# resi names automatically obtained, excludes N and C terminal caps
+resi = rmsf_data.columns[1:-1].tolist()
 print(len(resi))
 
 fig, ax = plt.subplots(figsize=(8, 4), constrained_layout=True)
