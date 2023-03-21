@@ -1,4 +1,4 @@
-# For cMD runs, for distances only, now modified to take variable length simulations
+# For cMD runs, for dihedrals only
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,26 +22,27 @@ def gen_df(file, n_runs=3):
         df (pandas DataFrame): DataFrame for heatmap
     """
 
-    dist_data = {}
+    dih_data = {}
 
     with open(file, "r") as f:
         for line in f:
             if not line.startswith(("@", "#")):
                 data = line.strip().split()
                 time = float(data[0]) / 1000
-                dist = float(data[1]) * 10  # convert to angstrom
+                dih = float(data[1]) # already in deg
 
-                # values need to be initialised as a list ([dist])
-                if time not in dist_data:
-                    dist_data[time] = [dist]
+                # values need to be initialised as a list ([dih])
+                if time not in dih_data:
+                    dih_data[time] = [dih]
                 # subsequent values are then appended
                 else:
-                    dist_data[time].append(dist)
+                    dih_data[time].append(dih)
 
-    df = pd.DataFrame.from_dict(dist_data)
+    df = pd.DataFrame.from_dict(dih_data)
     df["Run_ID"] = [f"Run {i+1}" for i in range(n_runs)]
     df.set_index("Run_ID", inplace=True)
     print(df.T.describe())
+    print(df.shape)
 
     return df
 
@@ -50,8 +51,8 @@ data_df = gen_df(snakemake.input[0], n_runs=snakemake.params.n_runs)
 
 fig, axes = plt.subplots(1, 2, figsize=(8, 5), gridspec_kw=dict(width_ratios=[1, 0.05]))
 
-vmin = int(getattr(snakemake.params, "vmin", 2))
-vmax = int(getattr(snakemake.params, "vmax", 15))
+vmin = int(getattr(snakemake.params, "vmin", -180))
+vmax = int(getattr(snakemake.params, "vmax", 180))
 sns.heatmap(data_df, vmin=vmin, vmax=vmax, cmap="rocket", ax=axes[0], cbar=False)
 
 fig.colorbar(axes[0].collections[0], cax=axes[1])

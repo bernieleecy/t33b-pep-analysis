@@ -19,6 +19,7 @@ include: "rules/trajs.smk"
 include: "rules/protein_rms.smk"
 include: "rules/peptide_rms.smk"
 include: "rules/n1039_dists.smk"
+include: "rules/n1039_dihs.smk"
 include: "rules/f1038_dists.smk"
 include: "rules/y993_dists.smk"
 include: "rules/glutamates_dists.smk"
@@ -61,6 +62,11 @@ for f in FOLDERS:
             f"results/{f}/y993_dists/Y993_dist_kde_clip_10ns.png"
         )
 
+n1039_input = []
+for f in FOLDERS:
+    if not samples.loc[f, "mutations"] == "N1039A":
+        n1039_input.append(f"results/{f}/n1039_dihs/N1039_chi1_heatmap.png")
+
 r17_input = []
 r17_clip_10ns_input = []
 for f in FOLDERS:
@@ -91,6 +97,7 @@ rule all:
         pep_input,
         k18ac_input,
         r17_input,
+        n1039_input,
         index=expand("runs/{folder}/index.ndx", folder=FOLDERS),
         protein_gro=expand("runs/{folder}/protein_noh2o.gro", folder=FOLDERS),
         fitted_xtc=expand("runs/{folder}/{i}-whole_fit.xtc", folder=FOLDERS, i=IDS),
