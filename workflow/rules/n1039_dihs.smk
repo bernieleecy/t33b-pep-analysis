@@ -48,3 +48,18 @@ rule plot_t33b_n1039_chi1_all_heatmaps:
         vmax=180,
     script:
         "../scripts/plot_dihs_heatmap.py"
+
+
+rule plot_t33b_n1039_chi1_all_hist:
+    input:
+        rules.make_t33b_n1039_dihs_xvg.output.dih_v_time,
+    output:
+        "results/{folder}/n1039_dihs/N1039_chi1_hist.png",
+    params:
+        bins = 36,
+        xmin = -180,
+        xmax = 180, 
+        xlabel = "chi1 angle (°)",
+        ymax = 40000,
+    script:
+        "../scripts/plot_hist.py"

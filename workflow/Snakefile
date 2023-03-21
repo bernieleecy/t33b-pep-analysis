@@ -22,6 +22,7 @@ include: "rules/n1039_dists.smk"
 include: "rules/n1039_dihs.smk"
 include: "rules/f1038_dists.smk"
 include: "rules/y993_dists.smk"
+include: "rules/loop_dists.smk"
 include: "rules/glutamates_dists.smk"
 include: "rules/plip.smk"
 include: "rules/water.smk"
@@ -66,6 +67,7 @@ n1039_input = []
 for f in FOLDERS:
     if not samples.loc[f, "mutations"] == "N1039A":
         n1039_input.append(f"results/{f}/n1039_dihs/N1039_chi1_heatmap.png")
+        n1039_input.append(f"results/{f}/n1039_dihs/N1039_chi1_hist.png")
 
 r17_input = []
 r17_clip_10ns_input = []
@@ -118,6 +120,12 @@ rule all:
             "results/{folder}/water_density/water_xtal_{i}.png",
             folder=FOLDERS,
             i=["1.5", "2.0"],
+        ),
+        za_bc_heatmap=expand(
+            "results/{folder}/za_bc_loop_dists/za_bc_loop_dist_heatmap.png", folder=FOLDERS
+        ),
+        za_bc_kde=expand(
+            "results/{folder}/za_bc_loop_dists/za_bc_loop_dist_kde.png", folder=FOLDERS
         ),
 
 
