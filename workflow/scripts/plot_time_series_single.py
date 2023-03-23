@@ -1,6 +1,7 @@
 """
 Time series plot (individual runs)
 Adapted for dealing with gromacs xvg files
+Adapted further to deal with variable run lengths (for T33B apo)
 """
 
 import numpy as np
@@ -43,19 +44,28 @@ time_file = snakemake.input[0]
 times, data = read_xvg_file(time_file, tu=time_unit)
 
 # plot data at a specified interval (from config files)
-# 100 ns trajectories in this workflow, so plot at 500 ps intervals
+# plot at 500 ps intervals if less than 500 ns, other 1 ns
 timestep = int(snakemake.config["xtc_step"])
-plot_step = int(snakemake.config["plot_step"])
-# must be an integer to use for slicing
+run_time = ((len(times)-1) * timestep) / 1000
+
+if run_time < 500:
+    plot_step = int(snakemake.config["plot_step"])
+else:
+    plot_step = 1000
+
 interval = int(plot_step / timestep)
 
 # plot data
 fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)
 ax.plot(times[::interval], data[::interval], color="black")
 
-# 100 ns trajectories so change to 5 ticks
-xticks_intervals = int(times[-1] / 5)
-xticks = np.arange(0, int(times[-1]) + 1, xticks_intervals)
+# determine number of ticks based on simulation time
+if run_time < 500:
+    xticks_intervals = int(times[-1] / 5)
+    xticks = np.arange(0, int(times[-1]) + 1, xticks_intervals)
+else:
+    xticks_intervals = int(times[-1] / 10)
+    xticks = np.arange(0, int(times[-1]) + 1, xticks_intervals)
 
 # check for the ylabel param, otherwise supply a default
 # can set ymin and ymax if desired

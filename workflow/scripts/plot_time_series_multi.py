@@ -55,7 +55,9 @@ times, data = read_xvg_files(files)
 # plot data at a specified interval (from config files)
 # 100 ns trajectories here, so plot at 500 ps intervals
 timestep = int(snakemake.config["xtc_step"])
+run_time = ((len(times)-1) * timestep) / 1000
 plot_step = int(snakemake.config["plot_step"])
+
 # must be an integer to use for slicing
 interval = int(plot_step / timestep)
 
@@ -65,9 +67,13 @@ fig, ax = plt.subplots(figsize=(7, 4), constrained_layout=True)
 for i, y in enumerate(data):
     ax.plot(times[::interval], y[::interval], label=f"Run {i+1}")
 
-# 100 ns intervals so change to 5 ticks
-xticks_intervals = int(times[-1] / 5)
-xticks = np.arange(0, int(times[-1]) + 1, xticks_intervals)
+# determine number of ticks based on simulation time
+if run_time < 500:
+    xticks_intervals = int(times[-1] / 5)
+    xticks = np.arange(0, int(times[-1]) + 1, xticks_intervals)
+else:
+    xticks_intervals = int(times[-1] / 10)
+    xticks = np.arange(0, int(times[-1]) + 1, xticks_intervals)
 
 # check for the ylabel param, otherwise supply a default
 # can set ymin and ymax if desired

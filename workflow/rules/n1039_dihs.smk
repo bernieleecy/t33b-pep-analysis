@@ -46,8 +46,9 @@ rule plot_t33b_n1039_chi1_all_heatmaps:
         title="N1039 chi1 angle",
         vmin=-180,
         vmax=180,
+        dist_on=False,
     script:
-        "../scripts/plot_dihs_heatmap.py"
+        "../scripts/plot_single_heatmap.py"
 
 
 rule plot_t33b_n1039_chi1_all_hist:
@@ -58,7 +59,7 @@ rule plot_t33b_n1039_chi1_all_hist:
     params:
         bins = 36,
         xmin = -180,
-        xmax = 180, 
+        xmax = 180,
         xlabel = "chi1 angle (°)",
         ymax = 40000,
     script:
