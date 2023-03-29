@@ -66,8 +66,18 @@ for f in FOLDERS:
 n1039_input = []
 for f in FOLDERS:
     if not samples.loc[f, "mutations"] == "N1039A":
-        n1039_input.append(f"results/{f}/n1039_dihs/N1039_chi1_heatmap.png")
-        n1039_input.append(f"results/{f}/n1039_dihs/N1039_chi1_hist.png")
+        n1039_input.extend(
+            [
+                f"results/{f}/n1039_dihs/N1039_chi{x}_heatmap.png"
+                for x in ["1", "2"]
+            ]
+        )
+        n1039_input.extend(
+            [
+                f"results/{f}/n1039_dihs/N1039_chi{x}_hist.png"
+                for x in ["1", "2"]
+            ]
+        )
         n1039_input.extend(
             [
                 f"results/{f}/n1039_dists/N1039_E981_{x}_dist_heatmap.png"

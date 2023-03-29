@@ -53,10 +53,14 @@ time_unit = str(getattr(snakemake.params, "time_unit", "ns"))
 times, data = read_xvg_files(files)
 
 # plot data at a specified interval (from config files)
-# 100 ns trajectories here, so plot at 500 ps intervals
+# plot at 500 ps intervals if less than 500 ns, other 1 ns
 timestep = int(snakemake.config["xtc_step"])
 run_time = ((len(times)-1) * timestep) / 1000
-plot_step = int(snakemake.config["plot_step"])
+
+if run_time < 500:
+    plot_step = int(snakemake.config["plot_step"])
+else:
+    plot_step = 1000
 
 # must be an integer to use for slicing
 interval = int(plot_step / timestep)

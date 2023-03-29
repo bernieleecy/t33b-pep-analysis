@@ -95,7 +95,7 @@ rule plot_t33b_n1039_e981_heatmaps:
         n_runs=N_RUNS,
         title="N1039\u2013E981 ({x})",
         vmin=2,
-        vmax=20,
+        vmax=10,
     script:
         "../scripts/plot_single_heatmap.py"
 
