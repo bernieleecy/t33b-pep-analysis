@@ -122,6 +122,9 @@ rule all:
         protein_rmsd=expand(
             "results/{folder}/protein/t33b_backbone_rmsd.png", folder=FOLDERS
         ),
+        brd_rmsd=expand(
+            "results/{folder}/protein/t33b_brd_backbone_rmsd.png", folder=FOLDERS
+        ),
         protein_rmsf=expand("results/{folder}/protein/t33b_rmsf.png", folder=FOLDERS),
         protein_rmsf_specific=expand(
             "results/{folder}/protein/t33b_rmsf_specific_resi.png", folder=FOLDERS

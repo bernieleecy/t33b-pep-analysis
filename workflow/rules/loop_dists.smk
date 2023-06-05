@@ -58,7 +58,7 @@ rule plot_t33b_za_bc_loop_ar_kde:
     output:
         "results/{folder}/za_bc_loop_dists/za_bc_loop_dist_kde.png",
     params:
-        xmin=5,
+        xmin=10,
         xmax=20,
         xlabel="Distance (Å)",
     script:
