@@ -84,6 +84,7 @@ rule plot_glu_violins:
         glu_1="E981",
         glu_2="E984",
         glu_3="E1044",
+        dist_on=True,
     script:
         "../scripts/plot_glutamates_violins.py"
 
@@ -194,5 +195,6 @@ rule plot_glu_violins_clip_10ns:
         glu_1="E981",
         glu_2="E984",
         glu_3="E1044",
+        dist_on=True,
     script:
         "../scripts/plot_glutamates_violins.py"

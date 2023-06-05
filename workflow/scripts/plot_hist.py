@@ -9,14 +9,33 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import glob
-import cygnus as cyg
 
 sns.set_style("ticks")
 sns.set_palette("colorblind")
 plt.style.use(snakemake.config["mpl_style"])
 
-# Plot histogram, for dihedrals, so no multiplication yet
-data = cyg.XvgFile(snakemake.input[0]).process_data().y_data
+def read_xvg_file(file, dist=False):
+    """
+    For processing a single xvg file to extract data for histogram
+
+    """
+    time_data = []
+
+    with open(file) as infile:
+        for line in infile:
+            if not (line.startswith("#") or line.startswith("@")):
+                data = line.strip().split()
+                data_val = float(data[1].strip())
+                if dist:
+                    time_data.append(data_val * 10)  # convert to A
+                else:
+                    time_data.append(data_val)
+
+    return time_data
+
+dist_on = bool(getattr(snakemake.params, "dist_on", False))
+time_file = snakemake.input[0]
+data = read_xvg_file(time_file, dist=dist_on)
 
 # plot data
 fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)

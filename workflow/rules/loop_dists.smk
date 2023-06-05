@@ -61,5 +61,6 @@ rule plot_t33b_za_bc_loop_ar_kde:
         xmin=10,
         xmax=20,
         xlabel="Distance (Å)",
+        dist_on=True,
     script:
         "../scripts/plot_kde.py"

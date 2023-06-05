@@ -82,6 +82,7 @@ rule plot_t33b_n1039_k18ac_kde:
         xmin=2,
         xmax=10,
         xlabel="Distance (Å)",
+        dist_on=True,
     script:
         "../scripts/plot_kde.py"
 
@@ -126,5 +127,6 @@ rule plot_t33b_n1039_kde_clip_10ns:
         xmin=2,
         xmax=10,
         xlabel="Distance (Å)",
+        dist_on=True,
     script:
         "../scripts/plot_kde.py"
