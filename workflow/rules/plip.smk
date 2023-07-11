@@ -83,6 +83,6 @@ rule plot_plip_all:
         "results/{folder}/plip/all_resi_hydrophobic_hydrophilic.png",
     params:
         k18_type=lambda wildcards: samples.loc[wildcards.folder, "k18_type"],
-        ymax=2000,
+        ymax=2100,
     script:
         "../scripts/plot_plip_20resi.py"

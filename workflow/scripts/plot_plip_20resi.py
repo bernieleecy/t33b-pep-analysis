@@ -110,7 +110,7 @@ elif snakemake.params.k18_type == "K18Ac":
         "L20",
     ]
 
-fig, ax = plt.subplots(figsize=(8, 5), constrained_layout=True)
+fig, ax = plt.subplots(figsize=(10, 4.5), constrained_layout=True)
 
 plot_data(df, ax=ax)
 
@@ -120,7 +120,7 @@ ymax = getattr(snakemake.params, "ymax", 1600)
 ax.set(xlabel="", ylabel="", ylim=(ymin, ymax))
 ax.set_ylabel("Count", fontweight="bold")
 ax.set_xlabel("Peptide residue", fontweight="bold")
-ax.set_xticklabels(labels, fontsize=10)
+ax.set_xticklabels(labels, fontsize=11)
 
 leg = ax.legend(frameon=False, loc="upper left")
 leg._legend_box.align = "left"
