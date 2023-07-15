@@ -118,11 +118,11 @@ ymin = getattr(snakemake.params, "ymin", 0)
 ymax = getattr(snakemake.params, "ymax", 1600)
 
 ax.set(xlabel="", ylabel="", ylim=(ymin, ymax))
-ax.set_ylabel("Count", fontweight="bold")
-ax.set_xlabel("Peptide residue", fontweight="bold")
-ax.set_xticklabels(labels, fontsize=11)
+ax.set_ylabel("Count", fontweight="bold", fontsize=14)
+ax.set_xlabel("Peptide residue", fontweight="bold", fontsize=14)
+ax.set_xticklabels(labels, fontsize=12)
 
-leg = ax.legend(frameon=False, loc="upper left")
+leg = ax.legend(frameon=False, loc="upper left", fontsize=13)
 leg._legend_box.align = "left"
 
 fig.savefig(snakemake.output[0], dpi=600)

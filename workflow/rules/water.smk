@@ -44,8 +44,8 @@ rule plot_water_density:
                  \nshow spheres, bd_wat and name OW \
                  \nset sphere_scale, 0.2, bd_wat \
                  \n \
-                 \nisomesh mesh_2.0, water, 2.0, bd_wat, carve=2.0 \
-                 \nisomesh mesh_1.5, water, 1.5, bd_wat, carve=2.0 \
+                 \nisomesh mesh_2.0, water, 2.0, bd_wat \
+                 \nisomesh mesh_1.5, water, 1.5, bd_wat \
                  \nisomesh mesh_all_2.0, water, 2.0 \
                  \nisomesh mesh_all_1.5, water, 1.5 \
                  \nhide mesh, mesh_all* \

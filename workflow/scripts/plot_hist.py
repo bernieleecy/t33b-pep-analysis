@@ -40,13 +40,13 @@ data = read_xvg_file(time_file, dist=dist_on)
 # plot data
 fig, ax = plt.subplots(figsize=(6, 4), constrained_layout=True)
 
-# need np.append as amber time data starts from frame 1
-bins = int(getattr(snakemake.params, "bins", 20))
-plt.hist(data, bins=bins)
+# plot bins between -180 to 180, at 10 degree intervals
+plt.hist(data, bins=np.arange(-180, 181, 10))
 
-# check for the xmax and xlabel params, otherwise supply a default
-xmin = float(getattr(snakemake.params, "xmin", 0))
-xmax = float(getattr(snakemake.params, "xmax", 10))
+# fix xmin and xmax for dihedral angles
+xmin = -180
+xmax = 180
+# check for the ymin, ymax and xlabel params, otherwise supply a default
 ymin = float(getattr(snakemake.params, "ymin", 0))
 ymax = float(getattr(snakemake.params, "ymax", 30000))
 xlabel = str(getattr(snakemake.params, "xlabel", "Dihedral (°)"))

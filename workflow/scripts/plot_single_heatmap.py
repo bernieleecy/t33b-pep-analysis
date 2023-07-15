@@ -58,7 +58,8 @@ vmin = int(getattr(snakemake.params, "vmin", 2))
 vmax = int(getattr(snakemake.params, "vmax", 15))
 sns.heatmap(data_df, vmin=vmin, vmax=vmax, cmap="rocket", ax=axes[0], cbar=False)
 
-fig.colorbar(axes[0].collections[0], cax=axes[1])
+label = getattr(snakemake.params, "label", "Distance (Å)")
+fig.colorbar(axes[0].collections[0], cax=axes[1], label=label)
 
 n_frames = data_df.shape[1]
 sim_time = (n_frames * snakemake.config["xtc_step"]) / 1000  # in ns

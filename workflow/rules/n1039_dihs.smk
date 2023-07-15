@@ -13,7 +13,6 @@ rule make_t33b_chi:
         grp_2="r 1039 & a CA CB CG OD1",
     shell:
         """
-        mkdir -p results/{wildcards.folder}/n1039_dihs/data
         echo -e "{params.grp_1} \n{params.grp_2} \nq" |
         gmx make_ndx -f {input} -o {output}
         """
@@ -52,9 +51,10 @@ rule plot_t33b_n1039_chi_all_heatmaps:
     params:
         n_runs=N_RUNS,
         title="N1039 chi{x} angle",
+        label="Dihedral angle (°)",
+        dist_on=False,
         vmin=-180,
         vmax=180,
-        dist_on=False,
     script:
         "../scripts/plot_single_heatmap.py"
 
@@ -65,10 +65,7 @@ rule plot_t33b_n1039_chi_all_hist:
     output:
         "results/{folder}/n1039_dihs/N1039_chi{x}_hist.png",
     params:
-        bins = 36,
-        xmin = -180,
-        xmax = 180,
         xlabel = "chi{x} angle (°)",
-        ymax = 40000,
+        ymax = 15000,
     script:
         "../scripts/plot_hist.py"

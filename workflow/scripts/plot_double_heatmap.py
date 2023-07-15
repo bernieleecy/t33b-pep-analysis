@@ -61,7 +61,8 @@ vmax = int(getattr(snakemake.params, "vmax", 15))
 sns.heatmap(df_1, vmin=vmin, vmax=vmax, cmap="rocket", ax=axes[0], cbar=False)
 sns.heatmap(df_2, vmin=vmin, vmax=vmax, cmap="rocket", ax=axes[1], cbar=False)
 
-fig.colorbar(axes[1].collections[0], cax=axes[2])
+label = getattr(snakemake.params, "label", "Distance (Å)")
+fig.colorbar(axes[1].collections[0], cax=axes[2], label=label)
 
 xticks = np.arange(0, 5001, 1000)
 xticklabels = np.arange(0, 101, 20)

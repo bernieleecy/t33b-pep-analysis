@@ -18,6 +18,7 @@ GLUTAMATES = ["E984", "E1044"]
 include: "rules/trajs.smk"
 include: "rules/protein_rms.smk"
 include: "rules/peptide_rms.smk"
+include: "rules/w889_dists.smk"
 include: "rules/n1039_dists.smk"
 include: "rules/n1039_dihs.smk"
 include: "rules/f1038_dists.smk"
@@ -35,6 +36,8 @@ for f in FOLDERS:
     if samples.loc[f, "peptide"] == "yes":
         pep_input.append(f"results/{f}/peptide/t33b_pep_backbone_rmsd.png")
         pep_input.append(f"results/{f}/peptide/t33b_pep_backbone_rmsf.png")
+        pep_input.append(f"results/{f}/w889_dists/w889_k9me3_dist_heatmap.png")
+        pep_input.append(f"results/{f}/w889_dists/w889_k9me3_dist_kde.png")
         pep_input.extend(
             [
                 f"results/{f}/vmd_hbonds/data/{p}_hbonds_above_5_{type}.dat"
