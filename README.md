@@ -1,10 +1,10 @@
 # Snakemake workflow: t33b-pep-analysis
 
-A Snakemake workflow for analysing T33B—peptide MD simulations, initialised on 9 January 2023 (and is thus under active development).
+A Snakemake workflow for analysing T33B—peptide MD simulations.
 * Currently using snakemake >=7.8, as this reruns code automatically if the parameters, code or input file set has changed – this saves a lot of typing
 
 On my M1 mac, the appropriate conda environment is `snake_env`
-* I have a configuration file in the `TRIM3` folder that activates the appropriate conda env and sets `$GMXLIB`, so that should be run before using this workflow
+* I have a configuration file in the `TRIM33` folder that activates the appropriate conda env and sets `$GMXLIB`, so that should be run before using this workflow
 * As of 11/08/2022, I'm using a new version of `snake_env` that also includes AmberTools22 (uses intel packages)
 * This version of `snake_env` has the `osx-64` subdir set in the `.condarc` file, see install instructions below
 
